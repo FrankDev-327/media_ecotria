@@ -10,12 +10,26 @@ var currentDate = function(){
 };
 
 var CommentModel = new Schema({
-    subscriberId:{ type: Schema.ObjectId, ref:'Suscribers', /*required: false*/ },
+    claps: { type:Number },
+    no_claps: { type:Number },
     postId:{ type: Schema.ObjectId, ref:'Posts', required: true },
-    commentBox:{ type: String },
-    //ownerComment:{ type: Schema.ObjectId, /*ref:'Posts', required: false*/ },
+    comments: [ { author: { type: String }, text: String } ],
 	fecha_creacion: { type: Date, default: currentDate()},
 	fecha_modificacion: { type: Date, default: currentDate()},
 });
+
+CommentModel.methods.clap = function(){
+    this.claps++
+    return this.save();
+}
+CommentModel.methods.no_clap = function(){
+    this.no_claps++
+    return this.save();
+}
+
+CommentModel.methods.comment = function(c) {
+    this.comments.push(c)
+    return this.save()
+}
 
 module.exports = mongoose.model('Comments', CommentModel);
