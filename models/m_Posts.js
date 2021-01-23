@@ -11,15 +11,18 @@ var currentDate = function(){
 
 var PostSchema = new Schema({
     subscriberId:{ type: Schema.ObjectId, ref:'Suscribers', required: false },
-    empresaId:{ type: Schema.ObjectId, ref:'Empresas', required: false },
+    //empresaId:{ type: Schema.ObjectId, ref:'Empresas', required: false },
 
-    TitlePost:{ type: String, trim: true, require:true },
-    Precio:{ type: Number, require:true },
+    titlePost:{ type: String, trim: true, /* require:true  */},
+    price:{ type: Number, /* require:true  */},
+    catergory: { type: String, /* require:true  */},
+    descriptionPost:{ type: String, /*require:true,*/ trim: true, },
+    //Images:{ type: String, /* require:true  */},
+    address: { type: String, /* require:true  */},
+    phoneNumber: { type: String, /* require:true  */},
+    email:{ type: String, /* require:true  */},
 
-    DescripcionPost:{ type: String, require:true, trim: true, },
-    Imagenes:{ type: String, require:true },
-
-	fecha_creacion: { type: Date, default: currentDate()},
-	fecha_modificacion: { type: Date, default: currentDate()},
+	createDate: { type: Date, default: currentDate()},
+	updateDate: { type: Date, default: currentDate()},
 });
 module.exports = mongoose.model('Posts', PostSchema);

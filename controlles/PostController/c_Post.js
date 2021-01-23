@@ -5,17 +5,18 @@ var PostModel = require('../../Models/m_Posts');
 async function createPost(req, res) {
     try {
         var params = req.body;
-        var idSub = req.suscriber._id
         var post = new PostModel();
-
-        post.subscriberId = idSub
-        //post.empresaId = params.empresaId;
-        post.TitlePost = params.TitlePost;
-        post.Precio = params.Precio;
-        post.DescripcionPost = params.DescripcionPost;
-
+        
+        post.subscriberId = params._id
+        post.titlePost = params.titlePost;
+        post.price = params.price;
+        post.descriptionPost = params.descriptionPost;
+        post.catergory = params.catergory;
+        post.address = params.address;
+        post.phoneNumber = params.phoneNumber;
+        post.email = params.correo
+        
         var data = await post.save();
-
         if (data == null) {
             return res.status(200).json({
                 code: 'API_P_404',
@@ -107,6 +108,31 @@ async function listMyPosts(req, res) {
     }
 }
 
+async function listAllPosts(req, res) {
+    try {
+        var data = await PostModel.find(idSub).exec();
+        if (data !== null && data.length > 0) {
+            return res.status(200).json({
+                data,
+                code: 'API_P_200',
+                message: 'Publicaciones.'
+            });
+        }
+        return res.status(200).json({
+            code: 'API_P_403',
+            message: 'Error al mostrar las publicaciones.'
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message,
+            message: 'Error en listAllPosts',
+            code: 'API_P_500'
+        });
+    }
+}
+
 async function viewMyPosts(req, res) {
     try {
         var setFind = {
@@ -170,6 +196,7 @@ var currentDate = async function () {
 
 module.exports = {
     createPost,
+    listAllPosts,
     updateMyPost,
     viewMyPosts,
     listMyPosts,
