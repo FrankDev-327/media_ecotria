@@ -1,6 +1,6 @@
 'use strict';
 
-var Setting = require ('../../Models/m_Setting');
+var { SettingModel } = require ('../../models/index');
 
 async function Create(req, res) {
 	res.status(200).send({message: 'Controller create Setting  success.'});
@@ -22,3 +22,10 @@ async function Delete(req, res) {
 	res.status(200).send({message: 'Controller delete Setting  success.'});
 }
 
+module.exports = {
+	Create,
+	Update,
+	View,
+	Delete,
+	List
+}

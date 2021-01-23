@@ -1,13 +1,13 @@
 'use strict';
 
 var express = require('express');
-var { MapaControll } = require('../Controllers/index');
+var { MapControll } = require('../../controlles/index');
 var api = express.Router();
 
-api.post('/create-mapa',  MapaControll.Create)
-api.put('/update-mapa/?id',  MapaControll.Update)
-api.get('/list-mapa',  MapaControll.List)
-api.get('/view-mapa/?id',  MapaControll.View)
-api.put('/delete-mapa/?id',  MapaControll.Delete)
+api.post('/create-mapa',  MapControll.Create)
+api.put('/update-mapa/?id',  MapControll.Update)
+api.get('/list-mapa',  MapControll.List)
+api.get('/view-mapa/?id',  MapControll.View)
+api.put('/delete-mapa/?id',  MapControll.Delete)
 
 module.exports = api

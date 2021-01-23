@@ -1,6 +1,6 @@
 'use strict';
 
-var CommentModel = require('../../Models/m_Comments');
+var { CommentModel } = require('../../models/index');
 
 async function createNewComment(req, res) {
     try {

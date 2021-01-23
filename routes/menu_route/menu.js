@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var { MenuControll } = require('../Controllers/index');
+var { MenuControll } = require('../../controlles/index');
 var api = express.Router();
 
 api.post('/create-menu', MenuControll.Create)

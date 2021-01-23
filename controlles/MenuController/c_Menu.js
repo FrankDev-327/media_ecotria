@@ -1,6 +1,6 @@
 'use strict';
 
-var Menu = require ('../../Models/m_Menu');
+var { MenuModel } = require('../../models/index');
 
 async function Create(req, res) {
 	res.status(200).send({message: 'Controller create Menu  success.'});
@@ -22,3 +22,10 @@ async function Delete(req, res) {
 	res.status(200).send({message: 'Controller delete Menu  success.'});
 }
 
+module.exports = {
+	Create,
+	Update,
+	View,
+	Delete,
+	List
+}

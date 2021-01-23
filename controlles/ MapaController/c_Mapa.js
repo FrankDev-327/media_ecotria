@@ -1,6 +1,6 @@
 'use strict';
 
-var Mapa = require ('../../Models/m_Mapa');
+var { MapModel } = require('../../models/index');
 
 async function Create(req, res) {
 	res.status(200).send({message: 'Controller create Mapa  success.'});
@@ -22,3 +22,10 @@ async function Delete(req, res) {
 	res.status(200).send({message: 'Controller delete Mapa  success.'});
 }
 
+module.exports = {
+	Create,
+	Update,
+	View,
+	Delete,
+	List
+}

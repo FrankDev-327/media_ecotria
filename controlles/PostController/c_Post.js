@@ -1,6 +1,6 @@
 'use strict';
 
-var PostModel = require('../../Models/m_Posts');
+var { PostModel } = require('../../models/index');
 
 async function createPost(req, res) {
     try {
