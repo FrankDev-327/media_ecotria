@@ -110,7 +110,7 @@ async function listMyPosts(req, res) {
 
 async function listAllPosts(req, res) {
     try {
-        var data = await PostModel.find(idSub).exec();
+        var data = await PostModel.find().exec();
         if (data !== null && data.length > 0) {
             return res.status(200).json({
                 data,
