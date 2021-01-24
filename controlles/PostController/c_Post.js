@@ -136,7 +136,7 @@ async function listAllPosts(req, res) {
 async function viewMyPosts(req, res) {
     try {
         var setFind = {
-            _id: req.params._id
+            _id: req.query._id
         };
         var data = await PostModel.findOne(setFind).exec();
         if (data !== null) {
