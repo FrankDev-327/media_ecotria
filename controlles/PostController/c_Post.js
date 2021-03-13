@@ -122,11 +122,11 @@ async function listAllPosts(req, res) {
                 dataInfo: [
                     {
                         $sort: {
-                            CreatedDate: -1
+                            createDate: 1
                         }
                     },
                     {
-                        $skip: parseInt(page) -1  //(parseInt(page) - 1) * parseInt(body.postsLimit)
+                        $skip: parseInt(page)  //(parseInt(page) - 1) * parseInt(body.postsLimit)
                     },
                     {
                         $limit: parseInt(body.postsLimit)
