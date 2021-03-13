@@ -122,7 +122,7 @@ async function listAllPosts(req, res) {
                 dataInfo: [
                     {
                         $sort: {
-                            createDate: 1
+                            createDate: -1
                         }
                     },
                     {
