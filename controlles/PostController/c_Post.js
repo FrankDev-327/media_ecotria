@@ -6,7 +6,7 @@ async function createPost(req, res) {
     try {
         var params = req.body;
         var post = new PostModel();
-        
+
         post.subscriberId = params._id
         post.titlePost = params.titlePost;
         post.price = params.price;
@@ -15,7 +15,7 @@ async function createPost(req, res) {
         post.address = params.address;
         post.phoneNumber = params.phoneNumber;
         post.email = params.correo
-        
+
         var data = await post.save();
         if (data == null) {
             return res.status(200).json({
@@ -110,17 +110,53 @@ async function listMyPosts(req, res) {
 
 async function listAllPosts(req, res) {
     try {
-        var data = await PostModel.find().exec();
-        if (data !== null && data.length > 0) {
+        var body = req.body;
+        console.log(body)
+        var page = body.currentPage <= 0 ? 1 : body.currentPage;
+        var data = await PostModel.aggregate([{
+            $facet: {
+                pageInfo: [
+                    { $group: { _id: null, count: { $sum: 1 } } }
+                ],
+                dataInfo: [
+                    {
+                        $sort: {
+                            CreatedDate: -1
+                        }
+                    },
+                    {
+                        $skip: (parseInt(page) - 1) * parseInt(body.postsLimit)
+                    },
+                    {
+                        $limit: parseInt(body.postsLimit)
+                    },
+                ]
+            }
+        },
+        {
+            $project: {
+                info: "$dataInfo",
+                total: "$pageInfo",
+                _id: 0
+            }
+        }
+        ]);
+
+        console.log(data);
+        if (data[0].info.length <= 0) {
             return res.status(200).json({
-                data,
-                code: 'API_P_200',
-                message: 'Publicaciones.'
+                code: 'API_P_404',
+                message: 'No hay publicaciones.'
             });
         }
+
         return res.status(200).json({
-            code: 'API_P_403',
-            message: 'Error al mostrar las publicaciones.'
+            data: data[0].info,
+            total: data[0].total[0].count,
+            page: parseInt(page),
+            limit: parseInt(body.postsLimit),
+            code: 'API_P_200',
+            message: 'Listado de publicaciones.'
         });
 
     } catch (error) {
