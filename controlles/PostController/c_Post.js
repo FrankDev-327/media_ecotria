@@ -126,7 +126,7 @@ async function listAllPosts(req, res) {
                         }
                     },
                     {
-                        $skip: (parseInt(page) - 1) * parseInt(body.postsLimit)
+                        $skip: parseInt(page)  //(parseInt(page) - 1) * parseInt(body.postsLimit)
                     },
                     {
                         $limit: parseInt(body.postsLimit)
