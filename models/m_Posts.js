@@ -22,7 +22,7 @@ var PostSchema = new Schema({
     phoneNumber: { type: String, /* require:true  */},
     email:{ type: String, /* require:true  */},
 
-	createDate: { type: Date, default: currentDate()},
-	updateDate: { type: Date, default: currentDate()},
+	createDate: { type: Date, default: new Date()},
+	updateDate: { type: Date, default: new Date()},
 });
 module.exports = mongoose.model('Posts', PostSchema);
