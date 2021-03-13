@@ -112,7 +112,7 @@ async function listAllPosts(req, res) {
     try {
         var body = req.body;
         console.log(body)
-        var page = parseInt(body.currentPage) <= 0 ? 1 : body.currentPage;
+        var page = parseInt(body.currentPage) //<= 0 ? 1 : body.currentPage;
         var data = await PostModel.aggregate([{
             $facet: {
                 pageInfo: [
@@ -125,7 +125,7 @@ async function listAllPosts(req, res) {
                         }
                     },
                     {
-                        $skip: (parseInt(page) - 1) * parseInt(body.postsLimit)
+                        $skip: (parseInt(page)) * parseInt(body.postsLimit)
                     },
                     {
                         $limit: parseInt(body.postsLimit)
