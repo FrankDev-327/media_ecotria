@@ -113,6 +113,7 @@ async function listAllPosts(req, res) {
         var body = req.body;
         console.log(body)
         var page = body.currentPage <= 0 ? 1 : body.currentPage;
+        console.log(page)
         var data = await PostModel.aggregate([{
             $facet: {
                 pageInfo: [
