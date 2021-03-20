@@ -111,7 +111,6 @@ async function listMyPosts(req, res) {
 async function listAllPosts(req, res) {
     try {
         var body = req.body;
-        console.log(body)
         var page = body.currentPage <= 0 ? 1 : body.currentPage;
         console.log(page)
         var data = await PostModel.aggregate([{
@@ -121,7 +120,7 @@ async function listAllPosts(req, res) {
                 ],
                 dataInfo: [
                     {
-                        $skip: parseInt(page)  //(parseInt(page) - 1) * parseInt(body.postsLimit)
+                        $skip: (parseInt(page) - 1) * parseInt(body.postsLimit)
                     },
                     {
                         $limit: parseInt(body.postsLimit)
@@ -138,7 +137,6 @@ async function listAllPosts(req, res) {
         }
         ]);
 
-        console.log(data);
         if (data[0].info.length <= 0) {
             return res.status(200).json({
                 code: 'API_P_404',
@@ -220,6 +218,52 @@ async function deteleMyPost(req, res) {
     }
 }
 
+async function countPostByCategory(req, res) {
+    try {
+        var data = await PostModel.aggregate([
+            {
+                $group: {
+                    _id: "$catergory",
+                    total: {
+                        $sum: 1
+                    },
+                    price: {
+                        $first: "$price"
+                    }
+                }
+            },
+            {
+                $project: {
+                    name_cat: "$_id",
+                    total: 1,
+                    price: 1,
+                    _id: 0
+                }
+            }
+        ]);
+        
+        if (data.length <= 0) {
+            return res.status(200).json({
+                code: 'API_P_403',
+                message: 'No hay informacion.'
+            });
+        }
+        return res.status(200).json({
+            data,
+            code: 'API_P_200',
+            message: 'Datos para grafica.'
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message,
+            message: 'Error en countPostByCategory',
+            code: 'API_P_500'
+        });
+    }
+}
+
 var currentDate = async function () {
     var timeObject = new Date();
     timeObject.setHours(timeObject.getHours() - 5);
@@ -228,6 +272,7 @@ var currentDate = async function () {
 
 module.exports = {
     createPost,
+    countPostByCategory,
     listAllPosts,
     updateMyPost,
     viewMyPosts,
