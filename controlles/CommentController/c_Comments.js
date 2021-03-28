@@ -15,21 +15,21 @@ async function createNewComment(req, res) {
         if (data == null) {
             return res.status(200).json({
                 code: 'API_CM_404',
-                message: 'Error al agregar su comentario.'
+                message: 'Error adding your comment.'
             });
         }
 
         return res.status(200).json({
             data,
             code: 'API_CM_200',
-            message: 'Comentario registrado.'
+            message: 'Registered comment.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en createNewComment',
+            message: 'Error in createNewComment',
             code: 'API_CM_500'
         });
     }
@@ -44,21 +44,21 @@ async function readCommnetOnPost(req, res) {
         if (data == null || data.length <= 0) {
             return res.status(200).json({
                 code: 'API_CM_404',
-                message: 'Error al mostrar los comentarios.'
+                message: 'Error displaying comments.'
             });
         }
 
         return res.status(200).json({
             data,
             code: 'API_CM_200',
-            message: 'Comentarios de una publicación.'
+            message: 'Post comments.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en createNewComment',
+            message: 'Error in createNewComment',
             code: 'API_CM_500'
         });
     }
@@ -78,21 +78,21 @@ async function editToComment(req, res) {
         if (data == null) {
             return res.status(200).json({
                 code: 'API_CM_404',
-                message: 'Error al actualizar el comentario.'
+                message: 'Error updating comment.'
             });
         }
 
         return res.status(200).json({
             data,
             code: 'API_CM_200',
-            message: 'Comentario actualizado.'
+            message: 'Updated comment.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en createNewComment',
+            message: 'Error in createNewComment',
             code: 'API_CM_500'
         });
     }

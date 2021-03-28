@@ -2,7 +2,7 @@
 
 var { PostModel } = require('../../models/index');
 
-async function createPost(req, res) {
+async function createPost(req, res) {   
     try {
         var params = req.body;
         var post = new PostModel();
@@ -20,21 +20,21 @@ async function createPost(req, res) {
         if (data == null) {
             return res.status(200).json({
                 code: 'API_P_404',
-                message: 'Error al registrar la publicación.'
+                message: 'Post registration failed.'
             });
         }
 
         return res.status(200).json({
             data,
             code: 'API_P_200',
-            message: 'Registo de la publicación con éxito.'
+            message: 'Successful publication registration.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en createPost',
+            message: 'Error in createPost',
             code: 'API_P_500'
         });
     }
@@ -62,19 +62,19 @@ async function updateMyPost(req, res) {
             return res.status(200).json({
                 data,
                 code: 'API_P_200',
-                message: 'Publicación actualizado.'
+                message: 'Updated publication.'
             });
         }
         return res.status(200).json({
             code: 'API_P_403',
-            message: 'Error al actualizar la Publicación.'
+            message: 'Failed to update Post.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en updateMyPost',
+            message: 'Error in updateMyPost',
             code: 'API_P_500'
         });
     }
@@ -90,19 +90,19 @@ async function listMyPosts(req, res) {
             return res.status(200).json({
                 data,
                 code: 'API_P_200',
-                message: 'Mis publicaciones.'
+                message: 'My posts.'
             });
         }
         return res.status(200).json({
             code: 'API_P_403',
-            message: 'Error al mostrar su publicaciones.'
+            message: 'Error displaying your post'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en listMyPosts',
+            message: 'Error in listMyPosts',
             code: 'API_P_500'
         });
     }
@@ -140,7 +140,7 @@ async function listAllPosts(req, res) {
         if (data[0].info.length <= 0) {
             return res.status(200).json({
                 code: 'API_P_404',
-                message: 'No hay publicaciones.'
+                message: 'No posts.'
             });
         }
 
@@ -150,14 +150,14 @@ async function listAllPosts(req, res) {
             page: parseInt(page),
             limit: parseInt(body.postsLimit),
             code: 'API_P_200',
-            message: 'Listado de publicaciones.'
+            message: 'List of publications.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en listAllPosts',
+            message: 'Error in listAllPosts',
             code: 'API_P_500'
         });
     }
@@ -173,7 +173,7 @@ async function viewMyPosts(req, res) {
             return res.status(200).json({
                 data,
                 code: 'API_P_200',
-                message: 'Mi publicación.'
+                message: 'My post.'
             });
         }
         return res.status(200).json({
@@ -185,7 +185,7 @@ async function viewMyPosts(req, res) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en viewMyPosts',
+            message: 'Error in viewMyPosts',
             code: 'API_P_500'
         });
     }
@@ -201,18 +201,18 @@ async function deteleMyPost(req, res) {
             return res.status(200).json({
                 data,
                 code: 'API_P_200',
-                message: 'Publicación eliminada.'
+                message: 'Post removed.'
             });
         }
         return res.status(200).json({
             code: 'API_P_403',
-            message: 'Error al eliminar su publicación.'
+            message: 'Failed to delete your post.'
         });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en deteleMyPost',
+            message: 'Error in deteleMyPost',
             code: 'API_P_500'
         });
     }
@@ -245,20 +245,20 @@ async function countPostByCategory(req, res) {
         if (data.length <= 0) {
             return res.status(200).json({
                 code: 'API_P_403',
-                message: 'No hay informacion.'
+                message: 'There is not information.'
             });
         }
         return res.status(200).json({
             data,
             code: 'API_P_200',
-            message: 'Datos para grafica.'
+            message: 'Data to create the graphic.'
         });
 
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             error: error.message,
-            message: 'Error en countPostByCategory',
+            message: 'Error in countPostByCategory',
             code: 'API_P_500'
         });
     }
