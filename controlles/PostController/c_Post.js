@@ -49,6 +49,7 @@ async function updateMyPost(req, res) {
         const newRG = {
             new: true
         };
+
         var setUpdate = {
             TitlePost: params.TitlePost,
             Precio: params.Precio,
@@ -81,18 +82,16 @@ async function updateMyPost(req, res) {
 
 async function updatePostImage(req, res) {
     try {
-        const newRG = {
-            new: true
-        };
         var params = req.body;
-        var id_img = {
-            _id: params._id
-        }
-        var setImg = {
-            Images: params.img
-        };
+        var data = await PostModel.findByIdAndUpdate(
+            { _id: params._id },
+            { "$set": { Images: params.img } },
+            {
+                "fields": { "_id": 1, "Images": 1 },
+                "new": true
+            }
+        ).exec();
 
-        var data = await PostModel.findByIdAndUpdate(id_img, setImg, newRG);
         if (data !== null) {
             return res.status(200).json({
                 data,
@@ -147,7 +146,6 @@ async function listAllPosts(req, res) {
     try {
         var body = req.body;
         var page = body.currentPage <= 0 ? 1 : body.currentPage;
-        console.log(page)
         var data = await PostModel.aggregate([{
             $facet: {
                 pageInfo: [
