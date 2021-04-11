@@ -5,5 +5,5 @@ module.exports = {
     SettingModel: require('./m_Setting'),
     NewsModel: require('./m_Noticias'),
     CommentModel :require('./m_Comments'),
-    
+    PostImage: require('./m_post_img')
 }

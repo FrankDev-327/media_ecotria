@@ -10,6 +10,7 @@ api.put('/post_update/:_id', PostControll.updateMyPost);
 api.get('/post_lists/', PostControll.listMyPosts);
 api.post('/post_list_all/', PostControll.listAllPosts)
 api.get('/post_view/', PostControll.viewMyPosts);
+api.post('/post_upload_img/', PostControll.updatePostImage);
 api.delete('/post_delete/:_id', PostControll.deteleMyPost);
 
 module.exports = api

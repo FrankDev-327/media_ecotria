@@ -2,7 +2,7 @@
 
 var { PostModel } = require('../../models/index');
 
-async function createPost(req, res) {   
+async function createPost(req, res) {
     try {
         var params = req.body;
         var post = new PostModel();
@@ -53,7 +53,6 @@ async function updateMyPost(req, res) {
             TitlePost: params.TitlePost,
             Precio: params.Precio,
             DescripcionPost: params.DescripcionPost,
-            //Imagenes: params.Imagenes,
             fecha_modificacion: await currentDate()
         }
         var data = await PostModel.findByIdAndUpdate(setUpdateBy, setUpdate, newRG);
@@ -68,6 +67,42 @@ async function updateMyPost(req, res) {
         return res.status(200).json({
             code: 'API_P_403',
             message: 'Failed to update Post.'
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message,
+            message: 'Error in updateMyPost',
+            code: 'API_P_500'
+        });
+    }
+}
+
+async function updatePostImage(req, res) {
+    try {
+        const newRG = {
+            new: true
+        };
+        var params = req.body;
+        var id_img = {
+            _id: params._id
+        }
+        var setImg = {
+            Images: params.img
+        };
+
+        var data = await PostModel.findByIdAndUpdate(id_img, setImg, newRG);
+        if (data !== null) {
+            return res.status(200).json({
+                data,
+                code: 'API_P_200',
+                message: 'Pots image updated.'
+            });
+        }
+        return res.status(200).json({
+            code: 'API_P_403',
+            message: 'Failed to update image post.'
         });
 
     } catch (error) {
@@ -241,7 +276,7 @@ async function countPostByCategory(req, res) {
                 }
             }
         ]);
-        
+
         if (data.length <= 0) {
             return res.status(200).json({
                 code: 'API_P_403',
@@ -272,6 +307,7 @@ var currentDate = async function () {
 
 module.exports = {
     createPost,
+    updatePostImage,
     countPostByCategory,
     listAllPosts,
     updateMyPost,

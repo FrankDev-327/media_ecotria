@@ -17,7 +17,7 @@ var PostSchema = new Schema({
     price:{ type: Number, /* require:true  */},
     catergory: { type: String, /* require:true  */},
     descriptionPost:{ type: String, /*require:true,*/ trim: true, },
-    //Images:{ type: String, /* require:true  */},
+    Images:{ type: String, /* require:true  */},
     address: { type: String, /* require:true  */},
     phoneNumber: { type: String, /* require:true  */},
     email:{ type: String, /* require:true  */},
