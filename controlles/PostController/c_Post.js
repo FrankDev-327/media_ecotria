@@ -1,22 +1,18 @@
 'use strict';
 
+const newRG = { new: true };
+const { currentDate } = require('../../Helpers/Dating/dating')
 var { PostModel } = require('../../models/index');
 
 async function createPost(req, res) {
     try {
-        var params = req.body;
-        var post = new PostModel();
+        const params = req.body;
+        const post = new PostModel({
+            ...params,
+            subscriberId = params._id
+        });
 
-        post.subscriberId = params._id
-        post.titlePost = params.titlePost;
-        post.price = params.price;
-        post.descriptionPost = params.descriptionPost;
-        post.catergory = params.catergory;
-        post.address = params.address;
-        post.phoneNumber = params.phoneNumber;
-        post.email = params.correo
-
-        var data = await post.save();
+        const data = await post.save();
         if (data == null) {
             return res.status(200).json({
                 code: 'API_P_404',
@@ -42,21 +38,15 @@ async function createPost(req, res) {
 
 async function updateMyPost(req, res) {
     try {
-        var params = req.body;
-        var setUpdateBy = {
-            _id: req.params._id
-        }
-        const newRG = {
-            new: true
-        };
-
-        var setUpdate = {
+        const params = req.body;
+        const setUpdateBy = { _id: req.params._id };
+        const setUpdate = {
             TitlePost: params.TitlePost,
             Precio: params.Precio,
             DescripcionPost: params.DescripcionPost,
             fecha_modificacion: await currentDate()
         }
-        var data = await PostModel.findByIdAndUpdate(setUpdateBy, setUpdate, newRG);
+        const data = await PostModel.findByIdAndUpdate(setUpdateBy, setUpdate, newRG);
 
         if (data !== null) {
             return res.status(200).json({
@@ -82,15 +72,10 @@ async function updateMyPost(req, res) {
 
 async function updatePostImage(req, res) {
     try {
-        var params = req.body;
-        var data = await PostModel.findByIdAndUpdate(
-            { _id: params._id },
-            { "$set": { Images: params.img } },
-            {
-                "fields": { "_id": 1, "Images": 1 },
-                "new": true
-            }
-        ).exec();
+        const params = req.body;
+        const _id = { _id: params._id };
+        const setUpdate = { Images: params.img };
+        const data = await PostModel.findByIdAndUpdate(_id, setUpdate, newRG).exec();
 
         if (data !== null) {
             return res.status(200).json({
@@ -116,10 +101,9 @@ async function updatePostImage(req, res) {
 
 async function listMyPosts(req, res) {
     try {
-        var idSub = {
-            subscriberId: req.suscriber._id
-        }
-        var data = await PostModel.find(idSub).populate('subscriberId').exec();
+        const idSub = {
+            subscriberId: req.suscriber._id }
+        const data = await PostModel.find(idSub).populate('subscriberId').exec();
         if (data !== null && data.length > 0) {
             return res.status(200).json({
                 data,
@@ -144,9 +128,9 @@ async function listMyPosts(req, res) {
 
 async function listAllPosts(req, res) {
     try {
-        var body = req.body;
-        var page = body.currentPage <= 0 ? 1 : body.currentPage;
-        var data = await PostModel.aggregate([{
+        const body = req.body;
+        const page = body.currentPage <= 0 ? 1 : body.currentPage;
+        const data = await PostModel.aggregate([{
             $facet: {
                 pageInfo: [
                     { $group: { _id: null, count: { $sum: 1 } } }
@@ -198,10 +182,8 @@ async function listAllPosts(req, res) {
 
 async function viewMyPosts(req, res) {
     try {
-        var setFind = {
-            _id: req.query._id
-        };
-        var data = await PostModel.findOne(setFind).exec();
+        const setFind = { _id: req.query._id };
+        const data = await PostModel.findOne(setFind).exec();
         if (data !== null) {
             return res.status(200).json({
                 data,
@@ -226,10 +208,8 @@ async function viewMyPosts(req, res) {
 
 async function deteleMyPost(req, res) {
     try {
-        var setDelete = {
-            _id: req.params._id
-        };
-        var data = await PostModel.findByIdAndDelete(setDelete).exec();
+        const setDelete = { _id: req.params._id };
+        const data = await PostModel.findByIdAndDelete(setDelete).exec();
         if (data !== null) {
             return res.status(200).json({
                 data,
@@ -253,7 +233,7 @@ async function deteleMyPost(req, res) {
 
 async function countPostByCategory(req, res) {
     try {
-        var data = await PostModel.aggregate([
+        const data = await PostModel.aggregate([
             {
                 $group: {
                     _id: "$catergory",
@@ -296,12 +276,6 @@ async function countPostByCategory(req, res) {
         });
     }
 }
-
-var currentDate = async function () {
-    var timeObject = new Date();
-    timeObject.setHours(timeObject.getHours() - 5);
-    return timeObject;
-};
 
 module.exports = {
     createPost,
