@@ -9,7 +9,7 @@ async function createPost(req, res) {
         const params = req.body;
         const post = new PostModel({
             ...params,
-            subscriberId = params._id
+            subscriberId : params._id
         });
 
         const data = await post.save();
