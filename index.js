@@ -31,14 +31,14 @@ mongoose.connect(conn.db_name, urlPar, (err, res) => {
 
 async function insertDataIntoPostModel() {
    try {
-      const listPrices = ['2004', '4514', '7522', '4742', '24521']
+      const listPrices = [2004.36, 4514.59, 7522.50, 4742.12, 2452.12]
       const listsNameProducts = ['caballo', 'ganado', 'cebolla', 'tomate', 'ajies', 'yuca', 'pepino']
       const listCategory = ['industria', 'transporte', 'vegetables', 'ganaderia', 'ciraderos']
 
 
       for await (let item of listPrices) {
          const arrayData = {
-            "titlePost": "Test Listing" + Math.floor(Math.random() * (6 - 1) + 1),
+            "titlePost": "Test Listing " + Math.floor(Math.random() * (6 - 1) + 1),
             "price": Math.floor(Math.random() * listPrices.length),
             "descriptionPost": "Listado de prueba, lorem ipsum insofactum",
             "catergory": Math.floor(Math.random() * listCategory.length),
