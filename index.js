@@ -39,9 +39,9 @@ async function insertDataIntoPostModel() {
       for await (let item of listPrices) {
          const arrayData = {
             "titlePost": "Test Listing " + Math.floor(Math.random() * (6 - 1) + 1),
-            "price": Math.floor(Math.random() * listPrices.length),
+            "price": listPrices[Math.floor(Math.random() * listPrices.length)],
             "descriptionPost": "Listado de prueba, lorem ipsum insofactum",
-            "catergory": Math.floor(Math.random() * listCategory.length),
+            "catergory": listCategory[Math.floor(Math.random() * listCategory.length)],
             "address": "Panamá",
             "phoneNumber": "6080-6080",
          }
