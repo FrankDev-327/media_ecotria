@@ -3,6 +3,8 @@
 const mongoose = require('mongoose');
 const urlPar = { useNewUrlParser: true }
 const app = require('./app');
+const CronJobManager = require('cron-job-manager');
+const { PostModel } = require('./models/index')
 const conn = require('./setting/config');
 
 mongoose.Promise = global.Promise;
@@ -10,6 +12,8 @@ mongoose.set('debug', true)
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
+
+
 
 mongoose.connect(conn.db_name, urlPar, (err, res) => {
    if (err) {
@@ -37,7 +41,7 @@ async function insertDataIntoPostModel() {
             "titlePost": "Test Listing " + Math.floor(Math.random() * (6 - 1) + 1),
             "price": listPrices[Math.floor(Math.random() * listPrices.length)],
             "descriptionPost": "Listado de prueba, lorem ipsum insofactum",
-            "catergory": listCategory[Math.floor(Math.random() * listCategory.length)],
+            "category": listCategory[Math.floor(Math.random() * listCategory.length)],
             "address": "Panamá",
             "phoneNumber": "6080-6080",
          }
@@ -51,7 +55,7 @@ async function insertDataIntoPostModel() {
 }
 
 
-/*const manager = new CronJobManager(
+const manager = new CronJobManager(
    'callingInsertDataIntoPostModel',
    '0-40 * 7-8 * * *',
    () => {
@@ -59,4 +63,4 @@ async function insertDataIntoPostModel() {
    }
 )
 
-manager.start('callingInsertDataIntoPostModel');*/
+manager.start('callingInsertDataIntoPostModel');
