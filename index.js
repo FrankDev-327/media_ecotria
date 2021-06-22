@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 const urlPar = { useNewUrlParser: true }
 const app = require('./app');
-const CronJobManager = require('cron-job-manager');
-const { PostModel } = require('./models/index')
 const conn = require('./setting/config');
 
 mongoose.Promise = global.Promise;
@@ -12,8 +10,6 @@ mongoose.set('debug', true)
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
-
-
 
 mongoose.connect(conn.db_name, urlPar, (err, res) => {
    if (err) {
@@ -55,7 +51,7 @@ async function insertDataIntoPostModel() {
 }
 
 
-const manager = new CronJobManager(
+/*const manager = new CronJobManager(
    'callingInsertDataIntoPostModel',
    '0-40 * 7-8 * * *',
    () => {
@@ -63,4 +59,4 @@ const manager = new CronJobManager(
    }
 )
 
-manager.start('callingInsertDataIntoPostModel');
+manager.start('callingInsertDataIntoPostModel');*/
