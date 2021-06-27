@@ -1,15 +1,16 @@
 'use strict';
 
 const newRG = { new: true };
+const { listingPosts, amoutsOfPost, amoutsOfPostBetweenDates, amountsOfPostsBetweenPrices } = require('../../Helpers/AggregateMethods/aggregate.method');
 const { currentDate } = require('../../Helpers/Dating/dating')
-var { PostModel } = require('../../models/index');
+const { PostModel } = require('../../models/index');
 
 async function createPost(req, res) {
     try {
         const params = req.body;
         const post = new PostModel({
             ...params,
-            subscriberId : params._id
+            subscriberId: params._id
         });
 
         const data = await post.save();
@@ -102,7 +103,8 @@ async function updatePostImage(req, res) {
 async function listMyPosts(req, res) {
     try {
         const idSub = {
-            subscriberId: req.suscriber._id }
+            subscriberId: req.suscriber._id
+        }
         const data = await PostModel.find(idSub).populate('subscriberId').exec();
         if (data !== null && data.length > 0) {
             return res.status(200).json({
@@ -130,29 +132,8 @@ async function listAllPosts(req, res) {
     try {
         const body = req.body;
         const page = body.currentPage <= 0 ? 1 : body.currentPage;
-        const data = await PostModel.aggregate([{
-            $facet: {
-                pageInfo: [
-                    { $group: { _id: null, count: { $sum: 1 } } }
-                ],
-                dataInfo: [
-                    {
-                        $skip: (parseInt(page) - 1) * parseInt(body.postsLimit)
-                    },
-                    {
-                        $limit: parseInt(body.postsLimit)
-                    },
-                ]
-            }
-        },
-        {
-            $project: {
-                info: "$dataInfo",
-                total: "$pageInfo",
-                _id: 0
-            }
-        }
-        ]);
+        const query = await listingPosts(body, page);
+        const data = await PostModel.aggregate(query).allowDiskUse(true);
 
         if (data[0].info.length <= 0) {
             return res.status(200).json({
@@ -231,29 +212,67 @@ async function deteleMyPost(req, res) {
     }
 }
 
+async function amoutsPostByDates(req, res) {
+    try {
+        const body = req.body;
+        const query = await amoutsOfPostBetweenDates(body);
+        const data = await PostModel.aggregate(query).allowDiskUse(true);
+
+        if (data.length <= 0) {
+            return res.status(200).json({
+                code: 'API_P_403',
+                message: 'There is not information.'
+            });
+        }
+        return res.status(200).json({
+            data,
+            code: 'API_P_200',
+            message: 'Data to create the graphic.'
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            error: error.message,
+            message: 'Error in amoutsPostByDates',
+            code: 'API_P_500'
+        });
+    }
+}
+
+async function countingPriceBetweenValues(req, res) {
+    try {
+        const body = req.body;
+        const query = await amountsOfPostsBetweenPrices(body);
+        const data = await PostModel.aggregate(query).allowDiskUse(true);
+
+        if (data.length <= 0) {
+            return res.status(200).json({
+                code: 'API_P_403',
+                message: 'There is not information.'
+            });
+        }
+
+        return res.status(200).json({
+            data,
+            code: 'API_P_200',
+            message: 'Data to create the graphic.'
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            error: error.message,
+            message: 'Error in countingPriceBetweenValues',
+            code: 'API_P_500'
+        });
+    }
+}
+
 async function countPostByCategory(req, res) {
     try {
-        const data = await PostModel.aggregate([
-            {
-                $group: {
-                    _id: "$catergory",
-                    total: {
-                        $sum: 1
-                    },
-                    price: {
-                        $first: "$price"
-                    }
-                }
-            },
-            {
-                $project: {
-                    name_cat: "$_id",
-                    total: 1,
-                    price: 1,
-                    _id: 0
-                }
-            }
-        ]);
+        const query = await amoutsOfPost();
+        const data = await PostModel.aggregate(query).allowDiskUse(true)
 
         if (data.length <= 0) {
             return res.status(200).json({
@@ -278,6 +297,8 @@ async function countPostByCategory(req, res) {
 }
 
 module.exports = {
+    countingPriceBetweenValues,
+    amoutsPostByDates,
     createPost,
     updatePostImage,
     countPostByCategory,
